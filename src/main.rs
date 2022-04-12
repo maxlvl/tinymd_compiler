@@ -1,6 +1,7 @@
 use std::path::Path;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
+use std::io::Write;
 
 
 fn get_title() -> String {
@@ -79,10 +80,23 @@ fn parse_markdown_file(filename: &str) {
         }
     }
 
-    for token in &tokens {
-        println!("{}", token);
+    let mut output_filename = String::from(&filename[..filename.len()-3]);
+    output_filename.push_str(".html");
+
+
+    let mut outfile = File::create(&output_filename)
+        .expect("[ERROR] Could not create output file");
+
+    for line in &tokens {
+        outfile.write_all(line.as_bytes())
+            .expect("[ERROR] Could not write to output file!");
     }
+
+    println!("[INFO] Parsing complete. See {}", &output_filename);
+
+
 }
+
 
 fn print_short_banner() {
     println!("{}", get_title());
