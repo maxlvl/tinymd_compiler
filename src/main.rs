@@ -1,6 +1,7 @@
 use std::path::Path;
 use std::fs::File;
-use std::io::{BufRead, BufReader}
+use std::io::{BufRead, BufReader};
+
 
 fn get_title() -> String {
     let mut title = String::from(env!("CARGO_PKG_NAME"));
@@ -40,30 +41,47 @@ fn parse_markdown_file(filename: &str) {
 
         match first_char.pop() {
             Some('#') => {
-                if ptag {
-                    ptag = false;
+                if _ptag {
+                    _ptag = false;
                     output_line.push_str("</p>\n");
                 }
 
-                if htag {
-                    htag = false;
+                if _htag {
+                    _htag = false;
                     output_line.push_str("</h1>\n");
                 }
 
-                htag = true;
+                _htag = true;
                 output_line.push_str("\n\n<h1>");
                 output_line.push_str(&line_contents[2..]);
             },
-            _ = {
-                if !ptag {
-                    ptag = true;
+            _ => {
+                if !_ptag {
+                    _ptag = true;
                     output_line.push_str("\n<p>");
                 }
                 output_line.push_str(&line_contents);
             }
         }
+
+        if _ptag {
+            _ptag = false;
+            output_line.push_str("</p>\n");
+        }
+
+        if _htag {
+            _htag = false;
+            output_line.push_str("</h1>\n");
+        }
+
+        if output_line != "<p></p>\n" {
+            tokens.push(output_line);
+        }
     }
 
+    for token in &tokens {
+        println!("{}", token);
+    }
 }
 
 fn print_short_banner() {
