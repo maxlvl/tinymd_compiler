@@ -1,0 +1,10 @@
+[package]
+name = "tinymd"
+version = "0.1.0"
+edition = "2021"
+authors = ["m9l"]
+description = "A tiny and mostly useless markdown compiler"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
